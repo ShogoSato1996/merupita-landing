@@ -108,6 +108,23 @@
 
   <div id="loading" style="display: none;">⏳ 出品文を生成中です…</div>
 
+  <!-- ✅ 出力例をここに追加 -->
+  <div style="margin-top: 30px; background: #eef1f5; padding: 15px; border-radius: 8px;">
+    <strong>▼ 出力例（参考）：</strong>
+    <pre style="white-space: pre-wrap; margin-top: 10px;">
+【商品名】UNIQLOのウルトラライトダウン  
+【カテゴリ】レディース・ジャケット  
+【状態】美品（数回着用）  
+【トーン】やさしく丁寧  
+
+ご覧いただきありがとうございます。  
+UNIQLOのウルトラライトダウンは、軽くて暖かく秋冬にぴったりのアイテムです。  
+数回のみ着用した美品で、目立った傷や汚れはありません。  
+迅速・丁寧な対応を心がけますので、どうぞよろしくお願いいたします。
+    </pre>
+  </div>
+  <!-- ✅ 出力例ここまで -->
+  
   <div id="output"></div>
   <button id="copyBtn" onclick="copyText()">📋 コピーする</button>
 
@@ -121,7 +138,6 @@
       copyBtn.style.display = 'none';
       loading.style.display = 'block';
 
-      //const res = await fetch('http://localhost:3001/generate', {
       const res = await fetch('https://merupita-api.onrender.com/generate', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
