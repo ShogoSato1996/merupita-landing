@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>メルぴた - 出品文自動生成</title>
+  <style>
+    body {
+      font-family: 'Helvetica', sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      color: #333;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 1em;
+      border-radius: 5px;
+      margin-top: 20px;
+      width: 100%;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #output {
+      background-color: white;
+      padding: 15px;
+      border: 1px solid #ccc;
+      margin-top: 30px;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      border-radius: 8px;
+      font-size: 1.1em;
+      position: relative;
+    }
+    #copyBtn {
+      display: none;
+      margin-top: 10px;
+      background-color: #28a745;
+    }
+    #copyBtn:hover {
+      background-color: #1e7e34;
+    }
+    #loading {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.1em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h2>出品文を生成</h2>
+
+  <label for="title">商品名</label>
+  <input id="title" placeholder="例：NIKE エアマックス">
+
+  <label for="category">カテゴリ</label>
+  <select id="category">
+    <option>ファッション</option>
+    <option>家電・ゲーム</option>
+    <option>コスメ・美容</option>
+    <option>本・教材</option>
+    <option>雑貨・その他</option>
+  </select>
+
+  <label for="condition">商品の状態</label>
+  <select id="condition">
+    <option>新品・未使用</option>
+    <option>目立った傷や汚れなし</option>
+    <option>やや傷や汚れあり</option>
+    <option>傷や汚れあり</option>
+  </select>
+
+  <label for="tone">トーン</label>
+  <select id="tone">
+    <option>丁寧・信頼感</option>
+    <option>カジュアル・親しみやすい</option>
+    <option>プロっぽい</option>
+    <option>まじめ・誠実</option>
+  </select>
+
+  <label for="note">補足コメント（任意）</label>
+  <input id="note" placeholder="例：箱あり、即日発送、まとめ買い歓迎 etc.">
+
+  <button onclick="generate()">✅ 出品文を作成する</button>
+
+  <div id="loading" style="display: none;">⏳ 出品文を生成中です…</div>
+
+  <div id="output"></div>
+  <button id="copyBtn" onclick="copyText()">📋 コピーする</button>
+
+  <script>
+    async function generate() {
+      const outputDiv = document.getElementById('output');
+      const copyBtn = document.getElementById('copyBtn');
+      const loading = document.getElementById('loading');
+
+      outputDiv.innerText = '';
+      copyBtn.style.display = 'none';
+      loading.style.display = 'block';
+
+      const res = await fetch('http://localhost:3001/generate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          title: document.getElementById('title').value,
+          category: document.getElementById('category').value,
+          condition: document.getElementById('condition').value,
+          tone: document.getElementById('tone').value,
+          note: document.getElementById('note').value,
+        })
+      });
+
+      const data = await res.json();
+      outputDiv.innerText = data.output;
+      loading.style.display = 'none';
+      copyBtn.style.display = 'block';
+    }
+
+    function copyText() {
+      const text = document.getElementById('output').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("出品文をコピーしました！");
+      });
+    }
+  </script>
+</body>
+</html>
