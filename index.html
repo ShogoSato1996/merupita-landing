@@ -129,6 +129,14 @@ UNIQLOのウルトラライトダウンは、軽くて暖かく秋冬にぴっ�
   <button id="copyBtn" onclick="copyText()">📋 コピーする</button>
 
   <script>
+    function getUserId() {
+      let uid = localStorage.getItem('user_id');
+      if (!uid) {
+        uid = crypto.randomUUID();
+        localStorage.setItem('user_id', uid);
+      }
+      return uid;
+    }
     async function generate() {
       const outputDiv = document.getElementById('output');
       const copyBtn = document.getElementById('copyBtn');
@@ -137,11 +145,13 @@ UNIQLOのウルトラライトダウンは、軽くて暖かく秋冬にぴっ�
       outputDiv.innerText = '';
       copyBtn.style.display = 'none';
       loading.style.display = 'block';
+      const userId = getUserId(); // ⭐️ ユーザーIDを取得
 
       const res = await fetch('https://merupita-api.onrender.com/generate', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
+          user_id: userId,
           title: document.getElementById('title').value,
           category: document.getElementById('category').value,
           condition: document.getElementById('condition').value,
