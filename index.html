@@ -161,9 +161,21 @@ UNIQLOのウルトラライトダウンは、軽くて暖かく秋冬にぴっ�
       });
 
       const data = await res.json();
+      if (data.error) {
+        outputDiv.innerText = "⚠️ " + data.error;
+        loading.style.display = 'none';
+        return;
+      }
+      
       outputDiv.innerText = data.output;
       loading.style.display = 'none';
       copyBtn.style.display = 'block';
+
+
+      //const data = await res.json();
+      //outputDiv.innerText = data.output;
+      //loading.style.display = 'none';
+      //copyBtn.style.display = 'block';
     }
 
     function copyText() {
